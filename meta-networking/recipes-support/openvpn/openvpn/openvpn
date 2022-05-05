@@ -9,7 +9,7 @@
 test $DEBIAN_SCRIPT_DEBUG && set -v -x
 
 DAEMON=/usr/sbin/openvpn
-CONFIG_DIR=/etc/openvpn
+CONFIG_DIR=/etc/natinst/share/openvpn
 test -x $DAEMON || exit 0
 test -d $CONFIG_DIR || exit 0
 

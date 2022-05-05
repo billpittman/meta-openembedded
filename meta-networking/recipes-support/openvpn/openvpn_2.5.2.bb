@@ -35,21 +35,22 @@ EXTRA_OECONF += "${@bb.utils.contains('DISTRO_FEATURES', 'pam', '', '--disable-p
 
 # Explicitly specify IPROUTE to bypass the configure-time check for /sbin/ip on the host.
 EXTRA_OECONF += "IPROUTE=${base_sbindir}/ip"
+nisysconfdir = "${sysconfdir}/natinst/share"
 
 do_install_append() {
     install -d ${D}/${sysconfdir}/init.d
     install -m 755 ${WORKDIR}/openvpn ${D}/${sysconfdir}/init.d
 
-    install -d ${D}/${sysconfdir}/openvpn
-    install -d ${D}/${sysconfdir}/openvpn/sample
-    install -m 755 ${S}/sample/sample-config-files/loopback-server  ${D}${sysconfdir}/openvpn/sample/loopback-server.conf
-    install -m 755 ${S}/sample/sample-config-files/loopback-client  ${D}${sysconfdir}/openvpn/sample/loopback-client.conf
-    install -dm 755 ${D}${sysconfdir}/openvpn/sample/sample-config-files
-    install -dm 755 ${D}${sysconfdir}/openvpn/sample/sample-keys
-    install -dm 755 ${D}${sysconfdir}/openvpn/sample/sample-scripts
-    install -m 644 ${S}/sample/sample-config-files/* ${D}${sysconfdir}/openvpn/sample/sample-config-files
-    install -m 644 ${S}/sample/sample-keys/* ${D}${sysconfdir}/openvpn/sample/sample-keys
-    install -m 644 ${S}/sample/sample-scripts/* ${D}${sysconfdir}/openvpn/sample/sample-scripts
+    install -d ${D}/${nisysconfdir}/openvpn
+    install -d ${D}/${nisysconfdir}/openvpn/sample
+    install -m 755 ${S}/sample/sample-config-files/loopback-server  ${D}${nisysconfdir}/openvpn/sample/loopback-server.conf
+    install -m 755 ${S}/sample/sample-config-files/loopback-client  ${D}${nisysconfdir}/openvpn/sample/loopback-client.conf
+    install -dm 755 ${D}${nisysconfdir}/openvpn/sample/sample-config-files
+    install -dm 755 ${D}${nisysconfdir}/openvpn/sample/sample-keys
+    install -dm 755 ${D}${nisysconfdir}/openvpn/sample/sample-scripts
+    install -m 644 ${S}/sample/sample-config-files/* ${D}${nisysconfdir}/openvpn/sample/sample-config-files
+    install -m 644 ${S}/sample/sample-keys/* ${D}${nisysconfdir}/openvpn/sample/sample-keys
+    install -m 644 ${S}/sample/sample-scripts/* ${D}${nisysconfdir}/openvpn/sample/sample-scripts
 
     if ${@bb.utils.contains('DISTRO_FEATURES','systemd','true','false',d)}; then
         install -d ${D}/${systemd_unitdir}/system
@@ -77,4 +78,4 @@ FILES_${PN} += "${systemd_unitdir}/system/openvpn@.service \
                "
 FILES_${PN}-sample += "${systemd_unitdir}/system/openvpn@loopback-server.service \
                        ${systemd_unitdir}/system/openvpn@loopback-client.service \
-                       ${sysconfdir}/openvpn/sample/"
+                       ${nisysconfdir}/openvpn/sample/"
